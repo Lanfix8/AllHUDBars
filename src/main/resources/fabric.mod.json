@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "allhudbars",
+  "version": "${version}",
+  "name": "AllHudBars",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/allhudbars/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "fr.lanfix.allhudbars.client.AllHudBarsClient"
+    ],
+    "main": [
+      "fr.lanfix.allhudbars.AllHudBars"
+    ]
+  },
+  "mixins": [
+    "allhudbars.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
