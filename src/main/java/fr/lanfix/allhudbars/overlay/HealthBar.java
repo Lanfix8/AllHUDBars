@@ -1,62 +1,64 @@
 package fr.lanfix.allhudbars.overlay;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import fr.lanfix.allhudbars.AllHudBars;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.Random;
 
 public class HealthBar {
 
-    private static final Minecraft mc = Minecraft.getInstance();
-    Random rng = new Random();
-    private long lastHealthDisplay;
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
+    final Random rng = new Random();
 
-    private static final ResourceLocation fullHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/full.png");
-    private static final ResourceLocation witherHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/wither.png");
-    private static final ResourceLocation poisonHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/poison.png");
-    private static final ResourceLocation frozenHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/frozen.png");
-    private static final ResourceLocation intermediateHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/intermediate.png");
-    private static final ResourceLocation emptyHealthBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/empty.png");
-    private static final ResourceLocation absorptionBar = ResourceLocation.fromNamespaceAndPath(AllHudBars.MOD_ID, "textures/gui/bars/health/absorption.png");
+    private static final Identifier fullHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/full.png");
+    private static final Identifier witherHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/wither.png");
+    private static final Identifier poisonHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/poison.png");
+    private static final Identifier frozenHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/frozen.png");
+    private static final Identifier intermediateHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/intermediate.png");
+    private static final Identifier emptyHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/empty.png");
+    private static final Identifier absorptionBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/absorption.png");
 
-    private static final ResourceLocation heartContainer = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/sprites/hud/heart/container.png");
-    private static final ResourceLocation absorptionHeart = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/sprites/hud/heart/absorbing_full.png");
+    private static final Identifier heartContainer = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/container.png");
+    private static final Identifier absorptionHeart = Identifier.of("minecraft", "textures/gui/sprites/hud/heart/absorbing_full.png");
 
-    private ResourceLocation currentBar = fullHealthBar;
+    private Identifier currentBar = fullHealthBar;
     private double intermediateHealth = 0;
 
-    public void render(GuiGraphics guiGraphics, Player player, int leftX, int y) {
-        if (mc.cameraEntity instanceof Player && !mc.options.hideGui) {
+    public void render(DrawContext context, PlayerEntity player, int x, int y, float tickDelta) {
+        if (mc.cameraEntity instanceof PlayerEntity && !mc.options.hudHidden
+                && mc.interactionManager != null && mc.interactionManager.hasStatusBars()) {
+            TextRenderer textRenderer = mc.textRenderer;
             updateBarTextures(player);
             // Only render absorption when necessary
             if (player.getAbsorptionAmount() > 0) {
-                renderAbsorptionBar(guiGraphics, leftX, y, player);
-                renderAbsorptionValue(guiGraphics, leftX, y, player);
+                renderAbsorptionBar(context, x, y, player);
+                renderAbsorptionValue(textRenderer, context, x, y, player);
             }
             // We need to render the health bar after beacause they overlap a little
-            renderHealthBar(guiGraphics, leftX, y, player);
-            renderHealthValue(guiGraphics, leftX, y, player);
+            renderHealthBar(context, tickDelta, x, y, player);
+            renderHealthValue(textRenderer, context, x, y, player);
         }
     }
 
-    public void updateBarTextures(Player player) {
-        if (player.hasEffect(MobEffects.WITHER)) {
+    public void updateBarTextures(PlayerEntity player) {
+        if (player.hasStatusEffect(StatusEffects.WITHER)) {
             currentBar = witherHealthBar;
-        } else if (player.hasEffect(MobEffects.POISON)) {
+        } else if (player.hasStatusEffect(StatusEffects.POISON)) {
             currentBar = poisonHealthBar;
-        } else if (player.isFullyFrozen()) {
+        } else if (player.isFrozen()) {
             currentBar = frozenHealthBar;
         } else {
             currentBar = fullHealthBar;
         }
     }
 
-    private void renderHealthValue(GuiGraphics guiGraphics, int x, int y, Player player) {
+    private void renderHealthValue(TextRenderer textRenderer, DrawContext context, int x, int y, PlayerEntity player) {
         double health = Math.ceil(player.getHealth() * 10) / 10;
         float maxHealth = player.getMaxHealth();
         String text = health + "/" + (int) player.getMaxHealth();
@@ -66,8 +68,8 @@ public class HealthBar {
         boolean isLowHealth = health / maxHealth <= 0.2;
 
         // Color value green when regen
-        boolean playerHasRegen = player.hasEffect(MobEffects.REGENERATION)
-                || player.hasEffect(MobEffects.INSTANT_HEALTH);
+        boolean playerHasRegen = player.hasStatusEffect(StatusEffects.REGENERATION)
+                || player.hasStatusEffect(StatusEffects.INSTANT_HEALTH);
 
         // Show a special string on the death screen (different if in hardcore)
         if (health <= 0) {
