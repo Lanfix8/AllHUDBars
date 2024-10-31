@@ -27,8 +27,6 @@ public abstract class HudBarsMixins {
 
     @Shadow @Nullable protected abstract LivingEntity getRiddenEntity();
 
-    @Shadow protected abstract int getHeartCount(@Nullable LivingEntity livingEntity);
-
     @Unique private int lastTicks;
 
     @Redirect(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusBars(Lnet/minecraft/client/gui/DrawContext;)V"))
@@ -49,8 +47,6 @@ public abstract class HudBarsMixins {
             this.client.getProfiler().swap("health");
             healthBar.render(context, player, left, y, tickDelta);
             LivingEntity riddenEntity = this.getRiddenEntity();
-//            int t = this.getHeartCount(riddenEntity);
-//            if (t == 0) {
             if (riddenEntity == null) {
                 this.client.getProfiler().swap("food");
                 FoodBar.renderFoodBar(context, player, y, right);
