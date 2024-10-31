@@ -31,19 +31,16 @@ public class HealthBar {
     private double intermediateHealth = 0;
 
     public void render(DrawContext context, PlayerEntity player, int x, int y, float tickDelta) {
-        if (mc.cameraEntity instanceof PlayerEntity && !mc.options.hudHidden
-                && mc.interactionManager != null && mc.interactionManager.hasStatusBars()) {
-            TextRenderer textRenderer = mc.textRenderer;
-            updateBarTextures(player);
-            // Only render absorption when necessary
-            if (player.getAbsorptionAmount() > 0) {
-                renderAbsorptionBar(context, x, y, player);
-                renderAbsorptionValue(textRenderer, context, x, y, player);
-            }
-            // We need to render the health bar after beacause they overlap a little
-            renderHealthBar(context, tickDelta, x, y, player);
-            renderHealthValue(textRenderer, context, x, y, player);
+        TextRenderer textRenderer = mc.textRenderer;
+        updateBarTextures(player);
+        // Only render absorption when necessary
+        if (player.getAbsorptionAmount() > 0) {
+            renderAbsorptionBar(context, x, y, player);
+            renderAbsorptionValue(textRenderer, context, x, y, player);
         }
+        // We need to render the health bar after beacause they overlap a little
+        renderHealthBar(context, tickDelta, x, y, player);
+        renderHealthValue(textRenderer, context, x, y, player);
     }
 
     public void updateBarTextures(PlayerEntity player) {

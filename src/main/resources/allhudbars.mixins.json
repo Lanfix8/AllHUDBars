@@ -6,7 +6,7 @@
   "mixins": [
   ],
   "client": [
-    "HealthBarMixins"
+    "HudBarsMixins"
   ],
   "injectors": {
     "defaultRequire": 1
