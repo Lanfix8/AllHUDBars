@@ -6,5 +6,7 @@ public class AllHudBarsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+
     }
+
 }
