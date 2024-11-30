@@ -9,14 +9,7 @@
   "license": "All-Rights-Reserved",
   "icon": "assets/allhudbars/icon.png",
   "environment": "client",
-  "entrypoints": {
-    "client": [
-      "fr.lanfix.allhudbars.client.AllHudBarsClient"
-    ],
-    "main": [
-      "fr.lanfix.allhudbars.AllHudBars"
-    ]
-  },
+  "entrypoints": {},
   "mixins": [
     "allhudbars.mixins.json"
   ],
