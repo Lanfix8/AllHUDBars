@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.profiler.Profilers;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,21 +42,21 @@ public abstract class HudBarsMixins {
             int tickDelta = instance.getTicks() - lastTicks;
             lastTicks = instance.getTicks();
 
-            this.client.getProfiler().push("armor");
+            Profilers.get().push("armor");
             int armorYOffset = player.getAbsorptionAmount() > 0 ? -20 : -10;
             ArmorBar.renderArmorBar(context, player, y + armorYOffset, left);
-            this.client.getProfiler().swap("health");
+            Profilers.get().swap("health");
             healthBar.render(context, player, left, y, tickDelta);
             LivingEntity riddenEntity = this.getRiddenEntity();
             if (riddenEntity == null) {
-                this.client.getProfiler().swap("food");
+                Profilers.get().swap("food");
                 FoodBar.renderFoodBar(context, player, y, right);
             }
 
-            this.client.getProfiler().swap("air");
+            Profilers.get().swap("air");
             AirBar.renderAirBar(context, player, y - 10, right);
 
-            this.client.getProfiler().pop();
+            Profilers.get().pop();
         }
     }
 
