@@ -44,9 +44,9 @@ public abstract class HudBarsMixins {
 
             Profilers.get().push("armor");
             int armorYOffset = player.getAbsorptionAmount() > 0 ? -20 : -10;
-            ArmorBar.renderArmorBar(context, player, y + armorYOffset, left);
+            ArmorBar.renderArmorBar(client.textRenderer, context, player, y + armorYOffset, left);
             Profilers.get().swap("health");
-            healthBar.render(context, player, left, y, tickDelta);
+            healthBar.render(client.textRenderer, context, player, left, y, tickDelta);
             LivingEntity riddenEntity = this.getRiddenEntity();
             if (riddenEntity == null) {
                 Profilers.get().swap("food");
@@ -66,7 +66,7 @@ public abstract class HudBarsMixins {
         if (livingEntity != null) {
             int x = context.getScaledWindowWidth() / 2 + 11;
             int y = context.getScaledWindowHeight() - 39;
-            VehicleBar.render(context, livingEntity, x, y);
+            VehicleBar.render(client.textRenderer, context, livingEntity, x, y);
         }
     }
 

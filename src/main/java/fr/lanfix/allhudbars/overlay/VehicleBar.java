@@ -1,7 +1,6 @@
 package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -10,13 +9,10 @@ import net.minecraft.util.Identifier;
 
 public class VehicleBar {
 
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
-
     private static final Identifier fullHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/vehicle/full.png");
     private static final Identifier emptyHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/vehicle/empty.png");
 
-    public static void render(DrawContext context, LivingEntity entity, int x, int y) {
-        TextRenderer textRenderer = mc.textRenderer;
+    public static void render(TextRenderer textRenderer, DrawContext context, LivingEntity entity, int x, int y) {
         renderHealthBar(context, x, y, entity);
         renderHealthValue(textRenderer, context, x, y, entity);
     }

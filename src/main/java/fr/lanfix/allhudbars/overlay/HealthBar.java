@@ -1,7 +1,6 @@
 package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -14,7 +13,6 @@ import java.util.Random;
 
 public class HealthBar {
 
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
     final Random rng = new Random();
 
     private static final Identifier fullHealthBar = Identifier.of(AllHudBars.MOD_ID, "textures/gui/bars/health/full.png");
@@ -31,8 +29,7 @@ public class HealthBar {
     private Identifier currentBar = fullHealthBar;
     private double intermediateHealth = 0;
 
-    public void render(DrawContext context, PlayerEntity player, int x, int y, float tickDelta) {
-        TextRenderer textRenderer = mc.textRenderer;
+    public void render(TextRenderer textRenderer, DrawContext context, PlayerEntity player, int x, int y, float tickDelta) {
         updateBarTextures(player);
         // Only render absorption when necessary
         if (player.getAbsorptionAmount() > 0) {
