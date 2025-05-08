@@ -2,7 +2,6 @@ package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -17,8 +16,8 @@ public class AirBar {
         int textureWidth = 80;
         if (player.isSubmergedInWater() || air < maxAir) {
             int airWidth = air * textureWidth / maxAir;
-            context.drawTexture(RenderLayer::getGuiTextured, emptyBar, right - textureWidth, y, 0, 0, textureWidth - airWidth, 9, textureWidth, 9);
-            context.drawTexture(RenderLayer::getGuiTextured, fullBar, right - airWidth, y, textureWidth - airWidth, 0, airWidth, 9, textureWidth, 9);
+            context.drawTexture(emptyBar, right - textureWidth, y, 0, 0, textureWidth - airWidth, 9, textureWidth, 9);
+            context.drawTexture(fullBar, right - airWidth, y, textureWidth - airWidth, 0, airWidth, 9, textureWidth, 9);
         }
     }
 

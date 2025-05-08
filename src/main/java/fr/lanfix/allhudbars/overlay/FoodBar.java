@@ -2,7 +2,6 @@ package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -19,8 +18,8 @@ public class FoodBar {
 
         int foodWidth = foodLevel * textureWidth / 20;
 
-        context.drawTexture(RenderLayer::getGuiTextured, emptyBar, right - textureWidth, y, 0, 0, textureWidth - foodWidth, 8, textureWidth, 8);
-        context.drawTexture(RenderLayer::getGuiTextured, fullBar, right - foodWidth, y, textureWidth - foodWidth, 0, foodWidth, 8, textureWidth, 8);
+        context.drawTexture(emptyBar, right - textureWidth, y, 0, 0, textureWidth - foodWidth, 8, textureWidth, 8);
+        context.drawTexture(fullBar, right - foodWidth, y, textureWidth - foodWidth, 0, foodWidth, 8, textureWidth, 8);
     }
 
 }

@@ -6,7 +6,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.profiler.Profilers;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +29,7 @@ public abstract class HudBarsMixins {
 
     @Unique private int lastTicks;
 
-    @Redirect(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusBars(Lnet/minecraft/client/gui/DrawContext;)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusBars(Lnet/minecraft/client/gui/DrawContext;)V"))
     public void renderStatusBars(InGameHud instance, DrawContext context) {
         // Based on a copy of the original code
         if (this.client.getCameraEntity() instanceof PlayerEntity player) {
@@ -42,25 +41,25 @@ public abstract class HudBarsMixins {
             int tickDelta = instance.getTicks() - lastTicks;
             lastTicks = instance.getTicks();
 
-            Profilers.get().push("armor");
+            this.client.getProfiler().push("armor");
             int armorYOffset = player.getAbsorptionAmount() > 0 ? -20 : -10;
             ArmorBar.renderArmorBar(client.textRenderer, context, player, y + armorYOffset, left);
-            Profilers.get().swap("health");
+            this.client.getProfiler().swap("health");
             healthBar.render(client.textRenderer, context, player, left, y, tickDelta);
             LivingEntity riddenEntity = this.getRiddenEntity();
             if (riddenEntity == null) {
-                Profilers.get().swap("food");
+                this.client.getProfiler().swap("food");
                 FoodBar.renderFoodBar(context, player, y, right);
             }
 
-            Profilers.get().swap("air");
+            this.client.getProfiler().swap("air");
             AirBar.renderAirBar(context, player, y - 10, right);
 
-            Profilers.get().pop();
+            this.client.getProfiler().pop();
         }
     }
 
-    @Redirect(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountHealth(Lnet/minecraft/client/gui/DrawContext;)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountHealth(Lnet/minecraft/client/gui/DrawContext;)V"))
     public void renderMountHealth(InGameHud instance, DrawContext context) {
         LivingEntity livingEntity = this.getRiddenEntity();
         if (livingEntity != null) {
