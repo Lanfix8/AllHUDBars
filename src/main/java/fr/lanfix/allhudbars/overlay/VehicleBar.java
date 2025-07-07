@@ -2,8 +2,8 @@ package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 
@@ -45,14 +45,14 @@ public class VehicleBar {
         int healthWidth = (int) Math.min(textureWidth * health / maxHealth, textureWidth);
 
         // Display full part
-        context.drawTexture(RenderLayer::getGuiTextured, fullHealthBar,
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, fullHealthBar,
                 x, y,
                 0, 0,
                 healthWidth, 9,
                 textureWidth, 9);
 
         // Display empty part
-        context.drawTexture(RenderLayer::getGuiTextured, emptyHealthBar,
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, emptyHealthBar,
                 x + healthWidth, y,
                 healthWidth, 0,
                 textureWidth - healthWidth, 9,
