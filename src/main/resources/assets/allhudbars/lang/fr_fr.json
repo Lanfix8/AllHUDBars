@@ -1,4 +1,4 @@
 {
-  "gui.simplehealthbar.zero_health": "Aïe!",
-  "gui.simplehealthbar.zero_health.hardcore": "...Aïe."
+  "gui.allhudbars.zero_health": "Aïe!",
+  "gui.allhudbars.zero_health.hardcore": "...Aïe."
 }

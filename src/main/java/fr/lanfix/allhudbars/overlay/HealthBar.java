@@ -1,9 +1,11 @@
 package fr.lanfix.allhudbars.overlay;
 
 import fr.lanfix.allhudbars.AllHudBars;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -69,8 +71,11 @@ public class HealthBar {
 
         // Show a special string on the death screen (different if in hardcore)
         if (health <= 0) {
-            boolean isHardcore = player.getWorld().getLevelProperties().isHardcore();
-            text = Text.translatable("gui.simplehealthbar.zero_health" + (isHardcore ? ".hardcore" : "")).getString();
+            ClientWorld world = MinecraftClient.getInstance().world;
+            if (world != null) {
+                boolean isHardcore = world.getLevelProperties().isHardcore();
+                text = Text.translatable("gui.allhudbars.zero_health" + (isHardcore ? ".hardcore" : "")).getString();
+            }
         }
 
         // Offset for text
